@@ -1,0 +1,147 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!! L1 - Configuration!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+sudo su -
+
+service frr stop #stop the frr service
+sed -i 's/zebra=no/zebra=yes/g' /etc/frr/daemons #activate zebra daemon
+sed -i 's/bgpd=no/bgpd=yes/g' /etc/frr/daemons #activate bgp daemon
+
+systemctl enable frr.service
+systemctl start frr.service
+
+
+ip link set dev swp1 up
+ip link set dev swp2 up
+ip link set dev swp3 up
+
+net add loopback lo ip address 10.2.1.1/32
+net add interface swp1 ip address 10.2.1.1/32
+net add interface swp2 ip address 192.168.1.2/24
+net add interface swp3 ip address 10.2.1.1/32
+net add interface swp1 ospf network point-to-point
+net add interface swp3 ospf network point-to-point
+net add ospf router-id 10.2.1.1
+net add ospf network 10.2.1.1/32 area 0.0.0.0
+net add ospf network 192.168.1.0/24 area 0.0.0.0
+net pending
+net commit
+
+
+systemctl reload frr.service
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!! L2 - Configuration !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+sudo su -
+
+service frr stop #stop the frr service
+sed -i 's/zebra=no/zebra=yes/g' /etc/frr/daemons #activate zebra daemon
+sed -i 's/bgpd=no/bgpd=yes/g' /etc/frr/daemons #activate bgp daemon
+
+systemctl enable frr.service
+systemctl start frr.service
+
+ip link set dev swp1 up
+ip link set dev swp2 up
+ip link set dev swp3 up
+
+
+
+net add loopback lo ip address 10.2.1.2/32
+net add interface swp1 ip address 10.2.1.2/32
+net add interface swp2 ip address 192.168.2.2/24
+net add interface swp3 ip address 10.2.1.2/32
+net add interface swp1 ospf network point-to-point
+net add interface swp3 ospf network point-to-point
+net add ospf router-id 10.2.1.2
+net add ospf network 10.2.1.2/32 area 0.0.0.0
+net add ospf network 192.168.2.0/24 area 0.0.0.0
+net pending
+net commit
+
+
+systemctl reload frr.service
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!! S1 - Configuration !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+sudo su -
+
+service frr stop #stop the frr service
+sed -i 's/zebra=no/zebra=yes/g' /etc/frr/daemons #activate zebra daemon
+sed -i 's/bgpd=no/bgpd=yes/g' /etc/frr/daemons #activate bgp daemon
+
+
+sudo systemctl enable frr.service
+sudo systemctl start frr.service
+
+sudo ip link set dev swp1 up
+sudo ip link set dev swp2 up
+
+net add loopback lo ip address 10.2.1.3/32
+net add interface swp1 ip address 10.2.1.3/32
+net add interface swp2 ip address 10.2.1.3/32
+net add interface swp1 ospf network point-to-point
+net add interface swp2 ospf network point-to-point
+net add ospf router-id 10.2.1.3
+net add ospf network 10.2.1.3/32 area 0.0.0.0
+net pending
+net commit
+
+
+systemctl reload frr.service
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! S2 - Configuration !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+sudo su -
+
+service frr stop #stop the frr service
+sed -i 's/zebra=no/zebra=yes/g' /etc/frr/daemons #activate zebra daemon
+sed -i 's/bgpd=no/bgpd=yes/g' /etc/frr/daemons #activate bgp daemon
+
+systemctl enable frr.service
+systemctl start frr.service
+
+ip link set dev swp1 up
+ip link set dev swp2 up
+
+net add loopback lo ip address 10.2.1.4/32
+net add interface swp1 ip address 10.2.1.4/32
+net add interface swp2 ip address 10.2.1.4/32
+net add interface swp1 ospf network point-to-point
+net add interface swp2 ospf network point-to-point
+net add ospf router-id 10.2.1.4
+net add ospf network 10.2.1.4/32 area 0.0.0.0
+net pending
+net commit
+
+systemctl reload frr.service
+
+
+!!!!!!!!!!!!!!!!  PC1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+sudo su -
+
+ip link set dev swp1 up
+
+net add interface swp1 ip address 192.168.1.1/24
+net add routing route 192.168.2.0/24 192.168.1.2
+net pending
+net commit
+
+
+!!!!!!!!!!!!!!!!!! PC2 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+sudo su -
+
+ip link set dev swp1 up
+
+net add interface swp1 ip address 192.168.2.1/24
+net add routing route 192.168.1.0/24 192.168.2.2
+net pending
+net commit
+
